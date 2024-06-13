@@ -1,0 +1,94 @@
+internal class Program
+{
+    public class Pessoa
+    {
+        public int Index { get; set; }
+        public string UserId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Sex { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public string DateOfBirth { get; set; }
+        public string JobTitle { get; set; }
+
+        public Pessoa(int index, string userId, string firstName, string lastName, string sex, string email, string phone, string dateOfBirth, string jobTitle)
+        {
+            Index = index;
+            UserId = userId;
+            FirstName = firstName;
+            LastName = lastName;
+            Sex = sex;
+            Email = email;
+            Phone = phone;
+            DateOfBirth = dateOfBirth;
+            JobTitle = jobTitle;
+        }
+
+        public override string ToString()
+        {
+            return $"Index: {Index}, UserId: {UserId}, Name: {FirstName} {LastName}, Sex: {Sex}, Email: {Email}, Phone: {Phone}, DateOfBirth: {DateOfBirth}, JobTitle: {JobTitle}";
+        }
+    }
+
+    public static void Main(string[] args)
+    {
+        
+        List<Pessoa> pessoas = new List<Pessoa>();
+
+        
+        string filePath = "C:\\Users\\Computador\\Desktop\\Trabalho AED\\people-100.csv"; 
+        LerArquivoCSV(filePath, pessoas);
+        
+        ImprimirLista(pessoas);
+    }
+
+
+    public static void LerArquivoCSV(string filePath, List<Pessoa> pessoas)
+    {
+        using (var reader = new StreamReader(filePath))
+        {            
+            reader.ReadLine();
+
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                var values = line.Split(',');
+
+                int index = int.Parse(values[0]);
+                string userId = values[1];
+                string firstName = values[2];
+                string lastName = values[3];
+                string sex = values[4];
+                string email = values[5];
+                string phone = values[6];
+                string dateOfBirth = values[7];
+                string jobTitle = values[8];
+
+                Pessoa pessoa = new Pessoa(index, userId, firstName, lastName, sex, email, phone, dateOfBirth, jobTitle);
+                pessoas.Add(pessoa);
+            }
+        }
+    }
+    public static void RemoverPessoaPorUserId(List<Pessoa> pessoas, string userId)
+    {
+        Pessoa pessoa = pessoas.FirstOrDefault(p => p.UserId == userId);
+        if (pessoa != null)
+        {
+            pessoas.Remove(pessoa);
+            Console.WriteLine($"Pessoa com UserId {userId} removida com sucesso.");
+        }
+        else
+        {
+            Console.WriteLine($"Não foi encontrada uma pessoa com o UserId {userId} na lista.");
+        }
+    }
+
+    public static void ImprimirLista(List<Pessoa> pessoas)
+    {
+        foreach (var pessoa in pessoas)
+        {
+            Console.WriteLine(pessoa);
+        }
+    }
+}
